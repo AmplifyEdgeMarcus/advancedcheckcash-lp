@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
 <style>
 :root{--navy:#08306b;--navy-d:#061f47;--blue:#0b4ea2;--yellow:#ffd200;--yellow-2:#ffc933;--ink:#10213d;--muted:#51607a;--line:#dfe5ee;--bg:#f4f7fb;--white:#fff;--radius:16px}
 *{box-sizing:border-box}
@@ -122,6 +125,62 @@ details p{color:var(--muted);margin:0 0 18px}
 .btn-line{background:#fff;color:var(--navy);border-color:var(--navy)}
 .ga{margin-top:20px;font-size:17px;color:var(--muted)}
 
+/* calculator */
+.calc{background:var(--bg)}
+.cgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;margin-top:28px;align-items:start}
+.cbox{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:0 10px 30px rgba(8,48,107,.06)}
+.cfield{margin-bottom:26px}
+.cfield:last-child{margin-bottom:0}
+.cfield .lbl{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:6px}
+.cfield .hint{font-size:15px;color:var(--muted);margin:6px 0 0}
+.money{display:flex;align-items:center;border:1.5px solid #c9d3e1;border-radius:10px;background:#fff;min-height:48px;width:140px;padding:0 10px;font-weight:800;color:var(--navy)}
+.money input{border:0;outline:0;width:100%;font:inherit;font-size:19px;color:var(--navy);background:transparent;padding:0 0 0 4px}
+.money:focus-within,.calc select:focus{outline:3px solid #9cc2ff;outline-offset:1px}
+.calc select{min-height:48px;border:1.5px solid #c9d3e1;border-radius:10px;padding:0 12px;font:inherit;font-size:17px;color:var(--navy);font-weight:700;background:#fff;width:100%}
+input[type=range]{width:100%;height:36px;accent-color:var(--navy);margin:4px 0 0;cursor:pointer}
+.scale{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res div{background:var(--bg);border-radius:12px;padding:14px 16px}
+.res dt{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.res dd{margin:2px 0 0;font-size:28px;font-weight:900;color:var(--navy);line-height:1.15}
+.res dd small{display:block;font-size:14px;font-weight:600;color:var(--muted);line-height:1.35;margin-top:2px}
+.res .hl{background:var(--navy)}
+.res .hl dt{color:#b9c9e6}
+.res .hl dd{color:var(--yellow)}
+.res .hl dd small{color:#d9e4f5}
+.estnote{font-size:14.5px;color:#3d3200;background:#fff8e0;border-left:5px solid var(--yellow-2);border-radius:8px;padding:12px 14px;margin:16px 0 0}
+.sched{margin-top:16px;border:0;padding:0}
+.sched summary{font-size:17px;padding:10px 36px 10px 0}
+.sched summary::after{top:4px}
+.tblwrap{overflow-x:auto}
+.sched table{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:8px}
+.sched th,.sched td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.sched th:first-child,.sched td:first-child{text-align:left}
+.sched th{color:var(--navy);font-size:13.5px;text-transform:uppercase;letter-spacing:.03em}
+.entails{margin-top:22px}
+.entails h3{color:var(--navy)}
+.entails ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.entails li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16.5px}
+.entails li strong{display:block;color:var(--navy)}
+.entails li.risk{border-left:5px solid #c0392b}
+
+/* map */
+.mgrid{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;margin-top:28px;align-items:stretch}
+.mapbox{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:440px;background:#e6edf6}
+#store-map{position:absolute;inset:0}
+.mapfb{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:16px}
+.mstack{display:grid;gap:18px}
+.pin{background:none;border:0}
+.pin svg{width:40px;height:52px;filter:drop-shadow(0 4px 6px rgba(3,18,48,.35))}
+.leaflet-tooltip.pinlbl{background:var(--navy);color:#fff;border:0;border-radius:8px;font-weight:800;font-size:14px;padding:4px 10px;box-shadow:0 4px 10px rgba(3,18,48,.25)}
+.leaflet-tooltip.pinlbl::before{border-top-color:var(--navy)}
+.leaflet-popup-content{font-family:inherit;font-size:15px;line-height:1.45;margin:14px 16px}
+.leaflet-popup-content strong{color:var(--navy);font-size:17px}
+.leaflet-popup-content .pbtn{display:inline-block;margin-top:8px;background:var(--yellow);color:var(--navy-d);font-weight:800;text-decoration:none;padding:8px 14px;border-radius:8px}
+.store .tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px}
+.store .tag::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--yellow);border:3px solid var(--navy)}
+#vendasta-webchat:empty{display:none}
+
 /* form */
 .req .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
 form{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:0 10px 30px rgba(8,48,107,.08)}
@@ -155,7 +214,8 @@ footer a{color:#fff}
 
 @media (max-width:900px){
   .hero .wrap,.bring .wrap,.req .wrap{grid-template-columns:1fr;gap:32px}
-  .steps,.fit,.sgrid{grid-template-columns:1fr}
+  .steps,.fit,.sgrid,.cgrid,.mgrid{grid-template-columns:1fr}
+  .mapbox{min-height:340px}
   .kgrid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:640px){
@@ -175,6 +235,14 @@ footer a{color:#fff}
   .facts .big{font-size:40px}
   .kgrid{grid-template-columns:1fr}
   .two{grid-template-columns:1fr}
+  .cbox{padding:20px}
+  .res{gap:10px}
+  .res div{padding:12px}
+  .res dt{font-size:12.5px;letter-spacing:.02em}
+  .res dd{font-size:23px}
+  .entails ul{grid-template-columns:1fr}
+  .mapbox{min-height:300px}
+  .store .tag{font-size:12px}
   .sticky{display:flex}
   footer{padding-bottom:120px}
 }
@@ -191,6 +259,7 @@ footer a{color:#fff}
 </header>
 
 <main>
+
 <section class="hero" aria-labelledby="h1">
   <div class="wrap">
     <div>
@@ -288,6 +357,56 @@ footer a{color:#fff}
   </div>
 </section>
 
+<section class="calc" id="calculator" aria-labelledby="calc-h">
+  <div class="wrap">
+    <span class="eyebrow">Know the cost</span>
+    <h2 id="calc-h">What would my loan cost?</h2>
+    <p class="lead">Pick an amount and when you&rsquo;d pay it off to see what a title loan could cost and what you&rsquo;d repay. No personal information needed.</p>
+    <div class="cgrid">
+      <form class="cbox" id="calc-form" onsubmit="return false" aria-label="Loan cost calculator">
+        <div class="cfield">
+          <div class="lbl"><label for="calc-amt">Loan amount</label>
+            <span class="money"><span aria-hidden="true">$</span><input id="calc-amt-n" type="number" inputmode="numeric" min="100" max="2500" step="50" value="1000" aria-label="Loan amount in dollars"></span></div>
+          <input id="calc-amt" type="range" min="100" max="2500" step="50" value="1000" aria-describedby="calc-amt-hint">
+          <div class="scale" aria-hidden="true"><span>$100</span><span>$2,500</span></div>
+          <p class="hint" id="calc-amt-hint">Tennessee allows $100 to $2,500 per vehicle title. Your amount depends on your car&rsquo;s value and ability to repay.</p>
+        </div>
+        <div class="cfield">
+          <label for="calc-per">When would you pay it off?</label>
+          <select id="calc-per" aria-describedby="calc-per-hint"></select>
+          <p class="hint" id="calc-per-hint">Each loan period is 30 days. Keeping the loan longer means renewing it, and charges are added every 30 days.</p>
+        </div>
+      </form>
+      <div class="cbox" aria-labelledby="calc-res-h">
+        <h3 id="calc-res-h" style="color:var(--navy)">Your estimate</h3>
+        <dl class="res" id="calc-out" aria-live="polite" aria-atomic="true" aria-describedby="calc-note">
+          <div><dt>Charges per 30 days</dt><dd id="o-per">$0<small></small></dd></div>
+          <div><dt>Total cost of the loan</dt><dd id="o-cost">$0<small></small></dd></div>
+          <div class="hl"><dt>Total to repay</dt><dd id="o-total">$0<small></small></dd></div>
+          <div><dt>APR equivalent</dt><dd id="o-apr">0%<small></small></dd></div>
+        </dl>
+        <details class="sched">
+          <summary>See the 30-day breakdown</summary>
+          <div class="tblwrap"><table aria-label="Estimated payment breakdown by 30-day period">
+            <thead><tr><th scope="col">Period</th><th scope="col">Balance</th><th scope="col">Charges</th><th scope="col">Toward balance</th><th scope="col">You pay</th></tr></thead>
+            <tbody id="o-rows"></tbody>
+          </table></div>
+        </details>
+        <p class="estnote" id="calc-note" style="margin-top:12px">Estimate using Tennessee&rsquo;s maximum allowed charges. Your actual rate, APR and terms are shown in your written disclosure before you sign. Subject to approval.</p>
+      </div>
+    </div>
+    <div class="entails">
+      <h3>What a title loan means for you</h3>
+      <ul>
+        <li><strong>Your car title secures the loan</strong>We hold your vehicle&rsquo;s title until the loan is paid off.</li>
+        <li><strong>You keep driving your car</strong>Your vehicle stays with you while you repay.</li>
+        <li class="risk"><strong>Your car can be repossessed</strong>If you don&rsquo;t repay as agreed, the lender may repossess and sell your vehicle as allowed by Tennessee law, and you may be charged repossession costs.</li>
+        <li><strong>Pay early with no penalty</strong>Pay off any time. Paying sooner means fewer 30-day charges, so you pay less overall.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="know" aria-labelledby="know-h">
   <div class="wrap">
     <span class="eyebrow">Know before you borrow</span>
@@ -319,25 +438,34 @@ footer a{color:#fff}
 
 <section class="stores" id="stores" aria-labelledby="stores-h">
   <div class="wrap">
-    <span class="eyebrow">Visit us</span>
+    <span class="eyebrow">Visit a store</span>
     <h2 id="stores-h">Two stores, right on the main road</h2>
-    <div class="sgrid">
-      <div class="store">
-        <h3>East Ridge</h3>
-        <address>5611 Ringgold Rd, Suite 80<br>East Ridge, TN 37412</address>
-        <table aria-label="East Ridge hours"><tr><td>Mon&ndash;Fri</td><td>9:30 am &ndash; 6:00 pm</td></tr><tr><td>Saturday</td><td>10:00 am &ndash; 2:00 pm</td></tr><tr><td>Sunday</td><td>Closed</td></tr></table>
-        <div class="row">
-          <a class="btn btn-navy" href="https://www.google.com/maps/search/?api=1&amp;query=Advanced+Check+Cash+5611+Ringgold+Rd+Suite+80+East+Ridge+TN+37412" target="_blank" rel="noopener" data-track="directions" data-track-location="store-east-ridge">Get directions</a>
-          <a class="btn btn-line" href="tel:+14238778880" data-track="call" data-track-location="store-east-ridge">(423) 877-8880</a>
-        </div>
+    <p class="lead">Tap a pin or a button for turn-by-turn directions in Google Maps.</p>
+    <div class="mgrid">
+      <div class="mapbox">
+        <div id="store-map" role="region" aria-label="Map of our East Ridge and Hixson stores"></div>
+        <div class="mapfb" id="map-fallback">Map loading&hellip; Use the &ldquo;Get directions&rdquo; buttons to open Google Maps.</div>
       </div>
-      <div class="store">
-        <h3>Hixson</h3>
-        <address>5721 TN-153, Suite 109<br>Hixson, TN 37343</address>
-        <table aria-label="Hixson hours"><tr><td>Mon&ndash;Fri</td><td>9:30 am &ndash; 6:00 pm</td></tr><tr><td>Saturday</td><td>10:00 am &ndash; 2:00 pm</td></tr><tr><td>Sunday</td><td>Closed</td></tr></table>
-        <div class="row">
-          <a class="btn btn-navy" href="https://www.google.com/maps/search/?api=1&amp;query=Advanced+Check+Cash+5721+TN-153+Suite+109+Hixson+TN+37343" target="_blank" rel="noopener" data-track="directions" data-track-location="store-hixson">Get directions</a>
-          <a class="btn btn-line" href="tel:+14238778880" data-track="call" data-track-location="store-hixson">(423) 877-8880</a>
+      <div class="mstack">
+        <div class="store">
+          <span class="tag">South &middot; near the GA line</span>
+          <h3>East Ridge</h3>
+          <address>5611 Ringgold Rd, Suite 80<br>East Ridge, TN 37412</address>
+          <table aria-label="East Ridge hours"><tr><td>Mon&ndash;Fri</td><td>9:30 am &ndash; 6:00 pm</td></tr><tr><td>Saturday</td><td>10:00 am &ndash; 2:00 pm</td></tr><tr><td>Sunday</td><td>Closed</td></tr></table>
+          <div class="row">
+            <a class="btn btn-navy" href="https://www.google.com/maps/dir/?api=1&amp;destination=5611+Ringgold+Rd+Suite+80%2C+East+Ridge%2C+TN+37412" target="_blank" rel="noopener" data-track="directions" data-track-location="store-east-ridge">Get directions</a>
+            <a class="btn btn-line" href="tel:+14238778880" data-track="call" data-track-location="store-east-ridge">(423) 877-8880</a>
+          </div>
+        </div>
+        <div class="store">
+          <span class="tag">North &middot; on Hwy 153</span>
+          <h3>Hixson</h3>
+          <address>5721 TN-153, Suite 109<br>Hixson, TN 37343</address>
+          <table aria-label="Hixson hours"><tr><td>Mon&ndash;Fri</td><td>9:30 am &ndash; 6:00 pm</td></tr><tr><td>Saturday</td><td>10:00 am &ndash; 2:00 pm</td></tr><tr><td>Sunday</td><td>Closed</td></tr></table>
+          <div class="row">
+            <a class="btn btn-navy" href="https://www.google.com/maps/dir/?api=1&amp;destination=5721+TN-153+Suite+109%2C+Hixson%2C+TN+37343" target="_blank" rel="noopener" data-track="directions" data-track-location="store-hixson">Get directions</a>
+            <a class="btn btn-line" href="tel:+14238778880" data-track="call" data-track-location="store-hixson">(423) 877-8880</a>
+          </div>
         </div>
       </div>
     </div>
@@ -353,7 +481,8 @@ footer a{color:#fff}
       <p class="lead">Leave a few details and a team member will call or text during store hours to answer questions and help you get ready for your visit.</p>
       <p class="lead" style="font-size:17px">We never ask for your Social Security number, bank account, or card details on this page.</p>
     </div>
-        <form id="lead-form" action="#" method="post" novalidate data-track="form">
+    
+    <form id="lead-form" action="#" method="post" novalidate data-track="form">
       <div class="f"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
       <div class="f"><label for="phone">Mobile phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(423) 555-0123" required></div>
       <div class="f"><label for="vehicle">Vehicle year, make &amp; model</label><input id="vehicle" name="vehicle" type="text" placeholder="e.g. 2016 Honda Accord" required></div>
@@ -414,7 +543,7 @@ footer a{color:#fff}
   }
   document.addEventListener('click',function(e){
     var a=e.target.closest('a[data-track]');if(a)track(a.dataset.track,a.dataset.trackLocation);
-  });
+  },true);
   f.addEventListener('submit',function(e){
     if(!f.checkValidity()){e.preventDefault();f.reportValidity();return;}
     track('form_submit','form');
@@ -422,5 +551,83 @@ footer a{color:#fff}
   });
 })();
 </script>
+<script>
+/* Loan cost calculator. Rates below default to Tennessee statutory maximums
+   (Tenn. Code 45-15-111(a), 45-15-113(d)). Ray must confirm his actual rates. */
+var CALC={
+  INTEREST_RATE_PER_PERIOD:0.02,      // 2% interest per 30-day period (TN max)
+  FEE_RATE_PER_PERIOD:0.20,           // customary fee, max 1/5 of balance per 30-day period (TN max)
+  PERIOD_DAYS:30,                     // TN title pledge agreements are 30 days
+  PRINCIPAL_REDUCTION_RATE:0.05,      // 5% of original principal required...
+  PRINCIPAL_REDUCTION_FROM_RENEWAL:3, // ...beginning with the 3rd renewal
+  MIN_AMOUNT:100, MAX_AMOUNT:2500, STEP:50, MAX_PERIODS:12, DEFAULT_PERIODS:1
+};
+(function(){
+  var C=CALC,$=function(id){return document.getElementById(id)};
+  var r=$('calc-amt'),n=$('calc-amt-n'),p=$('calc-per'),used=false;
+  if(!r)return;
+  for(var k=1;k<=C.MAX_PERIODS;k++){var o=document.createElement('option');o.value=k;
+    o.textContent=k===1?'At the end of the first 30 days':'After '+(k*C.PERIOD_DAYS)+' days ('+(k-1)+' renewal'+(k>2?'s':'')+')';p.appendChild(o);}
+  p.value=C.DEFAULT_PERIODS;
+  var usd=function(v){return '$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})};
+  var r2=function(v){return Math.round(v*100)/100};
+  function schedule(P,periods){
+    var bal=P,rows=[],cost=0;
+    for(var k=1;k<=periods;k++){
+      var interest=r2(bal*C.INTEREST_RATE_PER_PERIOD),fee=r2(bal*C.FEE_RATE_PER_PERIOD),ch=r2(interest+fee);
+      var last=k===periods,principal=last?bal:(k>=C.PRINCIPAL_REDUCTION_FROM_RENEWAL?Math.min(bal,r2(P*C.PRINCIPAL_REDUCTION_RATE)):0);
+      rows.push({k:k,bal:bal,interest:interest,fee:fee,ch:ch,principal:principal,pay:r2(ch+principal)});
+      cost=r2(cost+ch);bal=r2(bal-principal);
+    }
+    return {rows:rows,cost:cost,total:r2(P+cost)};
+  }
+  CALC.schedule=schedule;
+  function clamp(v){v=Math.round((+v||0)/C.STEP)*C.STEP;return Math.min(C.MAX_AMOUNT,Math.max(C.MIN_AMOUNT,v))}
+  function render(){
+    var P=clamp(r.value),periods=+p.value,s=schedule(P,periods),f=s.rows[0];
+    var rate=C.INTEREST_RATE_PER_PERIOD+C.FEE_RATE_PER_PERIOD,apr=rate*365/C.PERIOD_DAYS*100;
+    $('o-per').innerHTML=usd(f.ch)+'<small>'+usd(f.interest)+' interest + '+usd(f.fee)+' fee'+(periods>C.PRINCIPAL_REDUCTION_FROM_RENEWAL?'; lower as your balance goes down':'')+'</small>';
+    $('o-cost').innerHTML=usd(s.cost)+'<small>Interest and fees over '+(periods*C.PERIOD_DAYS)+' days</small>';
+    $('o-total').innerHTML=usd(s.total)+'<small>'+usd(P)+' borrowed + '+usd(s.cost)+' in charges</small>';
+    $('o-apr').innerHTML=apr.toFixed(1)+'%<small>'+(rate*100).toFixed(0)+'% of your balance every '+C.PERIOD_DAYS+' days</small>';
+    $('o-rows').innerHTML=s.rows.map(function(x){return '<tr><td>'+x.k+' (days '+((x.k-1)*C.PERIOD_DAYS+1)+'&ndash;'+(x.k*C.PERIOD_DAYS)+')</td><td>'+usd(x.bal)+'</td><td>'+usd(x.ch)+'</td><td>'+usd(x.principal)+'</td><td><strong>'+usd(x.pay)+'</strong></td></tr>'}).join('');
+  }
+  function mark(){if(!used){used=true;if(window.dataLayer)dataLayer.push({event:'lp_calculator',cta_location:'calculator'});if(window.gtag)gtag('event','lp_calculator',{cta_location:'calculator'});}}
+  r.addEventListener('input',function(){n.value=r.value;render();mark()});
+  n.addEventListener('change',function(){var v=clamp(n.value);n.value=v;r.value=v;render();mark()});
+  p.addEventListener('change',function(){render();mark()});
+  render();
+})();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<script>
+/* Store map: Leaflet + OpenStreetMap tiles, no API key. Coordinates hardcoded (see STORES comment). */
+window.addEventListener('load',function(){
+  var el=document.getElementById('store-map'),fb=document.getElementById('map-fallback');
+  if(!el||!window.L){if(fb)fb.textContent='Map unavailable. Use the \u201cGet directions\u201d buttons to open Google Maps.';return;}
+  var stores=[
+    {name:'East Ridge',addr:'5611 Ringgold Rd, Suite 80<br>East Ridge, TN 37412',lat:34.99233,lng:-85.22672,loc:'map-east-ridge',
+     dir:'https://www.google.com/maps/dir/?api=1&destination=5611+Ringgold+Rd+Suite+80%2C+East+Ridge%2C+TN+37412'},
+    {name:'Hixson',addr:'5721 TN-153, Suite 109<br>Hixson, TN 37343',lat:35.15293,lng:-85.24897,loc:'map-hixson',
+     dir:'https://www.google.com/maps/dir/?api=1&destination=5721+TN-153+Suite+109%2C+Hixson%2C+TN+37343'}
+  ];
+  var map=L.map(el,{scrollWheelZoom:false,tap:true});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+  var icon=L.divIcon({className:'pin',iconSize:[40,52],iconAnchor:[20,50],popupAnchor:[0,-46],tooltipAnchor:[0,-50],
+    html:'<svg viewBox="0 0 40 52" aria-hidden="true"><path d="M20 1C9.5 1 1 9.4 1 19.8 1 33.6 20 51 20 51s19-17.4 19-31.2C39 9.4 30.5 1 20 1z" fill="#08306b" stroke="#fff" stroke-width="2"/><circle cx="20" cy="19.5" r="8" fill="#ffd200"/></svg>'});
+  var pts=[];
+  stores.forEach(function(s){
+    var m=L.marker([s.lat,s.lng],{icon:icon,title:'Advanced Check Cash '+s.name,alt:'Advanced Check Cash '+s.name}).addTo(map);
+    m.bindTooltip(s.name,{permanent:true,direction:'top',className:'pinlbl'});
+    m.bindPopup('<strong>Advanced Check Cash &middot; '+s.name+'</strong><br>'+s.addr+'<br>Mon&ndash;Fri 9:30&ndash;6 &middot; Sat 10&ndash;2<br><a href="tel:+14238778880" data-track="call" data-track-location="'+s.loc+'">(423) 877-8880</a><br><a class="pbtn" href="'+s.dir+'" target="_blank" rel="noopener" data-track="directions" data-track-location="'+s.loc+'">Get directions</a>');
+    pts.push([s.lat,s.lng]);
+  });
+  map.fitBounds(pts,{paddingTopLeft:[40,90],paddingBottomRight:[40,24]});
+  if(fb)fb.remove();
+});
+</script>
+
+<div id="vendasta-webchat"></div>
+
 </body>
 </html>
