@@ -247,6 +247,21 @@ footer a{color:#fff}
   footer{padding-bottom:120px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.fchat{position:fixed;right:16px;bottom:16px;z-index:60;font-family:inherit}
+.fchat[hidden]{display:none}
+.fchat-btn{display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 20px 0 16px;border-radius:999px;border:2px solid var(--yellow);background:var(--navy);color:#fff;font:800 16px/1 inherit;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(8,48,107,.35)}
+.fchat-btn:hover{background:var(--navy-d)}
+.fchat-btn:focus-visible,.fchat-x:focus-visible,.fchat-panel a:focus-visible,.fchat-panel button:focus-visible{outline:3px solid var(--yellow);outline-offset:2px;box-shadow:0 0 0 5px var(--navy)}
+.fchat-btn svg{width:26px;height:26px;fill:var(--yellow);flex:none}
+.fchat-panel{position:absolute;right:0;bottom:70px;width:320px;max-width:calc(100vw - 32px);background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 16px 40px rgba(8,48,107,.3);overflow:hidden}
+.fchat-panel[hidden]{display:none}
+.fchat-head{display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;padding:12px 14px;font-weight:800;font-size:16px}
+.fchat-x{background:transparent;border:0;color:#fff;font-size:28px;line-height:1;width:44px;height:44px;margin:-8px -8px -8px 0;cursor:pointer;border-radius:8px}
+.fchat-body{padding:14px;display:grid;gap:10px}
+.fchat-msg{margin:0;background:var(--bg);border-radius:12px;padding:12px 14px;font-size:16px;line-height:1.4}
+.fchat-panel .btn{min-height:48px;font-size:16px;width:100%;white-space:normal;text-align:center}
+@media (max-width:760px){.fchat{bottom:calc(84px + env(safe-area-inset-bottom))}.fchat-btn{min-height:52px;padding:0 16px 0 12px}.fchat-panel{bottom:64px}}
+@media (prefers-reduced-motion:no-preference){.fchat-panel{animation:fchatin .15s ease-out}@keyframes fchatin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
 </style>
 </head>
 <body>
@@ -628,6 +643,47 @@ window.addEventListener('load',function(){
 </script>
 
 <div id="vendasta-webchat"></div>
+
+<div class="fchat" id="fallback-chat">
+  <div class="fchat-panel" id="fchat-panel" role="dialog" aria-label="Chat with Advanced Check Cash" hidden>
+    <div class="fchat-head"><span>Advanced Check Cash</span><button type="button" class="fchat-x" id="fchat-close" aria-label="Close chat">&times;</button></div>
+    <div class="fchat-body">
+      <p class="fchat-msg">Hi! Questions about a title loan? Text or call us.</p>
+      <a class="btn btn-primary" href="sms:+14238883398" data-track="text" data-track-location="chat-widget" aria-label="Text us at (423) 888-3398">Text us</a>
+      <a class="btn btn-navy" href="tel:+14238778880" data-track="call" data-track-location="chat-east-ridge" aria-label="Call East Ridge at (423) 877-8880">Call East Ridge</a>
+      <a class="btn btn-navy" href="tel:+14238778880" data-track="call" data-track-location="chat-hixson" aria-label="Call Hixson at (423) 877-8880">Call Hixson</a>
+      <a class="btn btn-line" href="#calculator" id="fchat-quote" data-track="quote" data-track-location="chat-widget">Get a quote</a>
+    </div>
+  </div>
+  <button type="button" class="fchat-btn" id="fchat-toggle" aria-label="Chat with us" aria-expanded="false" aria-controls="fchat-panel">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm3 5v2h10V8H7zm0 4v2h7v-2H7z"/></svg>
+    <span>Chat with us</span>
+  </button>
+</div>
+<script>
+(function(){
+  var box=document.getElementById('fallback-chat'),t=document.getElementById('fchat-toggle'),p=document.getElementById('fchat-panel'),x=document.getElementById('fchat-close'),q=document.getElementById('fchat-quote');
+  if(!box||!t||!p)return;
+  function open(){p.hidden=false;t.setAttribute('aria-expanded','true');var f=p.querySelector('a');if(f)f.focus();}
+  function close(back){p.hidden=true;t.setAttribute('aria-expanded','false');if(back)t.focus();}
+  t.addEventListener('click',function(){p.hidden?open():close(true);});
+  x.addEventListener('click',function(){close(true);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!p.hidden)close(true);});
+  q.addEventListener('click',function(e){var c=document.getElementById('calculator')||document.getElementById('request');if(c){e.preventDefault();c.scrollIntoView({behavior:'smooth'});}close(false);});
+  function vendastaLoaded(){
+    var host=document.getElementById('vendasta-webchat');
+    if(window.VendastaWebchat||(host&&host.children.length))return true;
+    var els=document.querySelectorAll('[id^="vendasta"]');
+    for(var i=0;i<els.length;i++){if(els[i]!==host&&els[i]!==box)return true;}
+    return false;
+  }
+  function check(){if(vendastaLoaded()){box.hidden=true;return true;}return false;}
+  if(!check()){
+    if(window.MutationObserver)new MutationObserver(check).observe(document.body,{childList:true,subtree:true});
+    var n=0,iv=setInterval(function(){if(check()||++n>60)clearInterval(iv);},1000);
+  }
+})();
+</script>
 
 </body>
 </html>
